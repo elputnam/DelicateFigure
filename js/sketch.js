@@ -7,12 +7,22 @@ let amplitude = []; // Height of wave
 let dx = []; // Value for incrementing X, to be calculated as a function of period and xspacing
 let yvalues; // Using an array to store height values for the wave (not entirely necessary)
 
+//CCapture
+var capture = false; // default is to not capture frames, can be changed with button in browser
+var capturer = new CCapture({
+  format:'gif', 
+  workersPath: 'js/',
+  framerate: 20
+});
+
+const NUM_FRAMES = 275;
+
 function setup() {
-  createCanvas(windowWidth, windowHeight, WEBGL);
+  // createCanvas(windowWidth, windowHeight, WEBGL);
+  createCanvas(500, 500, WEBGL);
   colorMode(HSB, 360, 100, 100, 100);
   background(0, 100,10);
   frameRate(20)
-  
   w = width + 16;
 
 for (let i = 0; i < maxwaves; i++) {
@@ -20,12 +30,12 @@ for (let i = 0; i < maxwaves; i++) {
     let period = random(100, 300); // How many pixels before the wave repeats
     dx[i] = (TWO_PI / period) * xspacing;
   }
-
   yvalues = [];
 }
 
 function draw() {
- background(0, 100, random(10));
+  if (capture && frameCount==1) capturer.start(); // start the animation capture
+  background(0, 100, random(10));
   push();
   translate(-width/2, -height/2)
   calcWave();
@@ -33,7 +43,7 @@ function draw() {
   pop();
   
   // scale(map(mouseX, 0, width, 10, 5))
-  scale(3);
+  scale(8);
   rotateX(millis()/ 1000);
   rotateY(millis() / 2000);
   rotateZ(millis()/ 1500)
@@ -45,6 +55,16 @@ function draw() {
   rotateY(180);
   sphere(width*.05, 1, int(random(2, 4)));
   pop();
+
+    //capture details
+    if (capture){
+      capturer.capture( canvas ); // if capture is 'true', save the frame
+      if (frameCount-1 == NUM_FRAMES){ //stop and save after NUM_FRAMES
+          capturer.stop(); 
+          capturer.save(); 
+          noLoop(); 
+        }
+      }
 }
 
 function calcWave() {
@@ -76,4 +96,15 @@ function renderWave() {
   for (let x = 0; x < yvalues.length; x++) {
    circle(x * xspacing, height / 2 + yvalues[x], random(10));
   }
+}
+
+function buttonPress()
+{
+    if (capture == false) {
+        capture = true;
+        document.getElementById("myButton").value='Saving Frames... Press Again to Cancel'; 
+        frameCount = 0;
+    } else {
+        location.reload(); //refresh the page (starts animation over, stops saving frames)
+    }
 }
