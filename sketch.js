@@ -32,7 +32,7 @@ function draw() {
   renderWave();
   pop();
   
-  scale(map(mouseX, 0, width, 10, 3))
+  // scale(map(mouseX, 0, width, 10, 3))
   scale(3);
   rotateX(millis()/ 1000);
   rotateY(millis() / 2000);
