@@ -8,18 +8,19 @@ let dx = []; // Value for incrementing X, to be calculated as a function of peri
 let yvalues; // Using an array to store height values for the wave (not entirely necessary)
 
 //CCapture
-var capture = false; // default is to not capture frames, can be changed with button in browser
+// var capture = false; // default is to not capture frames, can be changed with button in browser
 var capturer = new CCapture({
-  format:'gif', 
+  format:'webm', 
   workersPath: 'js/',
   framerate: 20
 });
+var btn1;
 
 const NUM_FRAMES = 275;
 
 function setup() {
   // createCanvas(windowWidth, windowHeight, WEBGL);
-  createCanvas(500, 500, WEBGL);
+  createCanvas(1920, 1080, WEBGL);
   colorMode(HSB, 360, 100, 100, 100);
   background(0, 100,10);
   frameRate(20)
@@ -31,10 +32,16 @@ for (let i = 0; i < maxwaves; i++) {
     dx[i] = (TWO_PI / period) * xspacing;
   }
   yvalues = [];
+
+    //CCapture
+    btn1 = document.createElement('button');
+    btn1.textContent = "save recording";
+    document.body.appendChild(btn1);
+    btn1.onclick = save_record;
 }
 
 function draw() {
-  if (capture && frameCount==1) capturer.start(); // start the animation capture
+  if (frameCount==1) capturer.start(); // start the animation capture
   background(0, 100, random(10));
   push();
   translate(-width/2, -height/2)
@@ -43,7 +50,7 @@ function draw() {
   pop();
   
   // scale(map(mouseX, 0, width, 10, 5))
-  scale(8);
+  scale(5);
   rotateX(millis()/ 1000);
   rotateY(millis() / 2000);
   rotateZ(millis()/ 1500)
@@ -57,15 +64,20 @@ function draw() {
   pop();
 
     //capture details
-    if (capture){
-      capturer.capture( canvas ); // if capture is 'true', save the frame
-      if (frameCount-1 == NUM_FRAMES){ //stop and save after NUM_FRAMES
-          capturer.stop(); 
-          capturer.save(); 
-          noLoop(); 
-        }
-      }
-}
+    // if (capture){
+    //   capturer.capture( canvas ); // if capture is 'true', save the frame
+    //   if (frameCount-1 == NUM_FRAMES){ //stop and save after NUM_FRAMES
+    //       capturer.stop(); 
+    //       capturer.save(); 
+    //       noLoop(); 
+    //     }
+    //   }
+    capturer.capture(document.getElementById('defaultCanvas0'));  
+    if (frameCount==1800){
+      save_record();
+    }
+    print(frameCount);
+  }
 
 function calcWave() {
   // Increment theta (try different values for 'angular velocity' here
@@ -98,13 +110,6 @@ function renderWave() {
   }
 }
 
-function buttonPress()
-{
-    if (capture == false) {
-        capture = true;
-        document.getElementById("myButton").value='Saving Frames... Press Again to Cancel'; 
-        frameCount = 0;
-    } else {
-        location.reload(); //refresh the page (starts animation over, stops saving frames)
-    }
+function save_record() {
+  capturer.save();
 }
