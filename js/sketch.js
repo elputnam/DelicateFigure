@@ -10,7 +10,7 @@ let yvalues; // Using an array to store height values for the wave (not entirely
 //CCapture
 // var capture = false; // default is to not capture frames, can be changed with button in browser
 var capturer = new CCapture({
-  format:'webm', 
+  format:'gif', 
   workersPath: 'js/',
   framerate: 20
 });
@@ -20,7 +20,7 @@ const NUM_FRAMES = 275;
 
 function setup() {
   // createCanvas(windowWidth, windowHeight, WEBGL);
-  createCanvas(1920, 1080, WEBGL);
+  createCanvas(400, 400, WEBGL);
   colorMode(HSB, 360, 100, 100, 100);
   background(0, 100,10);
   frameRate(20)
@@ -33,11 +33,11 @@ for (let i = 0; i < maxwaves; i++) {
   }
   yvalues = [];
 
-    //CCapture
-    btn1 = document.createElement('button');
-    btn1.textContent = "save recording";
-    document.body.appendChild(btn1);
-    btn1.onclick = save_record;
+    // //CCapture
+    // btn1 = document.createElement('button');
+    // btn1.textContent = "save recording";
+    // document.body.appendChild(btn1);
+    // btn1.onclick = save_record;
 }
 
 function draw() {
@@ -73,7 +73,7 @@ function draw() {
     //     }
     //   }
     capturer.capture(document.getElementById('defaultCanvas0'));  
-    if (frameCount==1800){
+    if (frameCount==360){
       save_record();
     }
     print(frameCount);
