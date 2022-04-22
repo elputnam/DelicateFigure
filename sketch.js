@@ -77,3 +77,7 @@ function renderWave() {
    circle(x * xspacing, height / 2 + yvalues[x], random(10));
   }
 }
+
+function windowResized() {
+  resizeCanvas(windowWidth, windowHeight);
+}
