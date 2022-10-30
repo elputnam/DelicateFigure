@@ -20,7 +20,7 @@ const NUM_FRAMES = 275;
 
 function setup() {
   // createCanvas(windowWidth, windowHeight, WEBGL);
-  createCanvas(400, 400, WEBGL);
+  createCanvas(467, 299, WEBGL);
   colorMode(HSB, 360, 100, 100, 100);
   background(0, 100,10);
   frameRate(20)
